@@ -1,0 +1,23 @@
+{
+  "name": "templatar",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "templates",
+    "string",
+    "replacement",
+    "defaults"
+  ],
+  "author": "Anthony Mugendi <ngurumugz@gmail.com>",
+  "license": "MIT",
+  "description": "A lightweight, flexible template placeholder replacement library for JavaScript with customizable delimiters.",
+  "dependencies": {
+    "dot-prop": "^9.0.0"
+  },
+  "devDependencies": {},
+  "repository": "https://github.com/mugendi/templatar.git"
+}
