@@ -6,6 +6,7 @@
  */
 
 import { getProperty } from 'dot-prop';
+import util from 'util';
 
 class Templatar {
   constructor(options = {}) {
@@ -36,15 +37,22 @@ class Templatar {
       const trimmedKey = key.trim();
 
       // get value or use default
-      const value = getProperty(data, trimmedKey, defaultVal);
-
-      // console.log({key, defaultVal, value});
+      let value = getProperty(data, trimmedKey, defaultVal);
 
       // throw if missing key
       if (value === undefined && !this.ignoreMissing) {
         throw new Error(
           `Key "${trimmedKey}" is not found and ignoreMissing is false`
         );
+      }
+
+      // handle values that are objects
+      if (typeof value == 'object') {
+        value = util.inspect(value, { depth: 4});
+      }
+      // stringify the rest
+      else if (typeof value !== 'string') {
+        value = String(value);
       }
 
       return String(this.transform({ value, defaultVal, key: trimmedKey }));
