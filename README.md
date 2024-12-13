@@ -30,7 +30,7 @@ npm install templatar
 ### Basic Usage
 
 ```javascript
-import { Templatar } from 'templatar';
+import Templatar from 'templatar';
 
 const replacer = new Templatar();
 const template = 'Hello <{name}>, welcome to <{place}>!';
@@ -81,11 +81,11 @@ const replacer = new Templatar({
   ignoreMissing: true,
   transform: ({ value, key }) => {
     return value || 'N/A';
-  }
+  },
 });
 
 const template = 'User: <{name}>, Score: <{score}>';
-const data = { name: 'Charlie'};
+const data = { name: 'Charlie' };
 
 const result = replacer.replace(template, data);
 console.log(result); // "User: Charlie, Score: N/A"
@@ -114,15 +114,17 @@ console.log(result); // "Item: Widget, Price: $19.99, Date: 1/15/2024"
 ```
 
 ### Using Detault Values
-We can also easily define default values within our placeholders by using the syntax `propName||defaultValue`. 
+
+We can also easily define default values within our placeholders by using the syntax `propName||defaultValue`.
 
 ```javascript
 const template = 'User: <{name}>, Score: <{score||0}>';
-const data = { name: 'Charlie'};
+const data = { name: 'Charlie' };
 
 const result = replacer.replace(template, data);
 console.log(result); // "User: Charlie, Score: 0"
 ```
+
 Note: We do not need to set `ignoreMissing` to `true` as long as we have default values defined since any missing values use that default.
 
 ## API Reference
@@ -158,6 +160,78 @@ Replaces placeholders in the template with corresponding values from the data ob
 - `data`: Object containing replacement values
 - Returns: String with all placeholders replaced
 - Throws: Error if keys are missing and `ignoreMissing` is false
+
+<!-- TODO: Add advanced usage section -->
+
+## Why the fuss?
+
+So you might be wondering why this module is even useful when there are other template replacement modules out there.
+
+Well I developed this for use with generating dynamic AI prompts using markdown templates. But new lines, spaces, symbols and tabs all have significant meaning in markdown. So we should be able to do crazy stuff like this.
+
+```markdown
+- ACCESSORIES:
+  <{accessories ||
+  Any Observable:
+  - Headgear
+  - Footwear
+  - Body drapes
+  - Neckpieces
+  - Eyewear
+  - Hair accessories
+  - Waist accessories
+  - Hand accessories
+  - Ear accessories
+  - Wristwear
+    }>
+```
+
+Now imagine the following template replacement data:
+
+```javascript
+let accessories = `
+  - Headgear
+  - Footwear
+  - Another bullet`;
+
+const data = {
+  accessories: `
+  - Headgear
+  - Footwear
+  - Another bullet`,
+};
+
+const result = replacer.replace(template, data);
+console.log(result); // "User: Charlie, Score: 0"
+```
+
+This yields :
+
+```markdown
+ACCESSORIES:
+- Headgear
+- Footwear
+- Another bullet
+```
+
+But if `accessories` is null or missing, then it defaults to:
+
+```markdown
+ACCESSORIES: 
+Any Observable:
+- Headgear
+- Footwear
+- Body drapes
+- Neckpieces
+- Eyewear
+- Hair accessories
+- Waist accessories
+- Hand accessories
+- Ear accessories
+- Wristwear
+```
+
+I hope you can now see how powerful this is and how it is useful, and different.
 
 ## Error Handling
 
