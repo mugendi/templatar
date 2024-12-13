@@ -38,6 +38,8 @@ class Templatar {
       // get value or use default
       const value = getProperty(data, trimmedKey, defaultVal);
 
+      // console.log({key, defaultVal, value});
+
       // throw if missing key
       if (value === undefined && !this.ignoreMissing) {
         throw new Error(
@@ -45,7 +47,7 @@ class Templatar {
         );
       }
 
-      return String(this.transform({ value, key: trimmedKey }));
+      return String(this.transform({ value, defaultVal, key: trimmedKey }));
     });
   }
 }
